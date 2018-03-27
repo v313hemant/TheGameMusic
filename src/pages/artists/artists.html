@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>TheGameMusic</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-row>
+    <ion-col *ngFor="let playlist of myPlaylists">
+      <ion-thumbnail item-left>
+        <img src="{{playlist.image}}">
+      </ion-thumbnail>
+      <h2>{{playlist.name}}</h2>
+      <button ion-button (click)="goToSelectedPlaylist(playlist)">See tracks</button>
+    </ion-col>
+  </ion-row>
+
+  <ion-list>
+    <ion-item *ngFor="let artist of myArtists">
+      <ion-thumbnail item-left>
+        <img src="{{artist.image}}">
+      </ion-thumbnail>
+      <h2>{{artist.name}}</h2>
+      <button ion-button (click)="goToSelectedArtist(artist)">See top tracks</button>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
