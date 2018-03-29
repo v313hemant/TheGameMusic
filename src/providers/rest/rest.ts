@@ -12,8 +12,17 @@ export class RestProvider {
 
   private playlistTracksURL = 'http://18.218.127.133:8080/streamIt/getPlaylistTracks';
   private artistTracksURL = 'http://18.218.127.133:8080/streamIt/getArtistTracks';
+  private youtubeSearchTracks = "http://18.218.127.133:8080/streamIt/searchYoutube";
+
   constructor(public http: HttpClient) {
     console.log('Hello RestProvider Provider');
+  }
+
+  getSearchYoutubeTracks(inputQuery): Observable<ITrackConstraint[]> {
+    const params = new HttpParams().set('inputQuery', inputQuery);
+    return this.http.get(this.youtubeSearchTracks, {params: params})
+                    .map(this.extractData)
+                    .catch(this.handleError);
   }
 
   getPlaylistTracks(entityName): Observable<ITrackConstraint[]> {
