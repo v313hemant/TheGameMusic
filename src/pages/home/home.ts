@@ -1,7 +1,9 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { NavParams } from 'ionic-angular';
+import { NavParams, NavController } from 'ionic-angular';
 import { ITrackConstraint } from 'ionic-audio';
 import { RestProvider } from '../../providers/rest/rest';
+import { TracksServiceProvider } from '../../providers/tracks-service/tracks-service';
+import { RunTracksPage } from '../run-tracks/run-tracks';
 
 @Component({
   selector: 'page-home',
@@ -15,8 +17,10 @@ export class HomePage {
   currentIndex: number = -1;
   currentTrack: ITrackConstraint;
   errorMessage: string;
+  newIndex: number;
 
-  constructor(private _cdRef: ChangeDetectorRef, private navParams: NavParams, public rest: RestProvider) {
+
+  constructor(private _cdRef: ChangeDetectorRef, public navCtrl: NavController, private navParams: NavParams, public rest: RestProvider, public tracksService: TracksServiceProvider) {
     this.entityName = navParams.get('entityName');
     this.entityType = navParams.get('entityType');
     if(this.entityType === "playlist"){
@@ -53,53 +57,14 @@ export class HomePage {
              myTracks => this.myTracks = myTracks,
              error =>  this.errorMessage = <any>error);
   }
-  add(track: ITrackConstraint) {
-    this.playlist.push(track);
+
+  playService(track: ITrackConstraint, index: number){
+    console.log(this.myTracks);
+    // this.tracksService.stopTrack();
+    this.tracksService.setMyTracks(this.myTracks);
+    this.tracksService.setCurrentTrack(track, index);
+    this.navCtrl.push(RunTracksPage);
   }
 
-  play(track: ITrackConstraint, index: number) {
-      this.currentTrack = track;
-      this.currentIndex = index;
-  }
-
-  next() {
-    // if there is a next track on the list play it
-    if (this.playlist.length > 0 && this.currentIndex >= 0 && this.currentIndex < this.playlist.length - 1) {
-      let i = this.currentIndex + 1;
-      let track = this.playlist[i];
-      this.play(track, i);
-      this._cdRef.detectChanges();  // needed to ensure UI update
-    } else if (this.currentIndex == -1 && this.playlist.length > 0) {
-      // if no track is playing then start with the first track on the list
-      this.play(this.playlist[0], 0);
-    }
-  }
-
-  onTrackFinished(track: any) {
-    this.next();
-  }
-
-  clear() {
-    this.playlist = [];
-  }
 
 }
-
-
-
-//   // plugin won't preload data by default, unless preload property is defined within json object - defaults to 'none'
-//   this.myTracks = [{
-//     src: 'http://ec2-18-218-127-133.us-east-2.compute.amazonaws.com/efs-mount-point/sampledir/test.mp3',
-//     artist: 'Astrix',
-//     title: 'Here and there',
-//     art: 'assets/img/astrix1.jpg',
-//     preload: 'metadata' // tell the plugin to preload metadata such as duration for this track, set to 'none' to turn off
-//   },
-//   {
-//     src: 'http://ec2-18-218-127-133.us-east-2.compute.amazonaws.com/efs-mount-point/sampledir/test.mp3',
-//     artist: 'Shpongle',
-//     title: 'Around the world in a tea/ Ott mix',
-//     art: 'assets/img/shpongle1.jpg',
-//     preload: 'metadata' // tell the plugin to preload metadata such as duration for this track,  set to 'none' to turn off
-//   }
-// ];

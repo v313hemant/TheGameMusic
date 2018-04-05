@@ -9,11 +9,13 @@ import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
+import { RunTracksPage } from '../pages/run-tracks/run-tracks';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { IonicAudioModule, WebAudioProvider, CordovaMediaProvider, defaultAudioProviderFactory } from 'ionic-audio';
 import { ArtistsPage } from "../pages/artists/artists";
 import { RestProvider } from '../providers/rest/rest';
+import { TracksServiceProvider } from '../providers/tracks-service/tracks-service';
 
 let pages = [
     MyApp,
@@ -22,6 +24,7 @@ let pages = [
     ContactPage,
     ArtistsPage,
     HomePage,
+    RunTracksPage,
     TabsPage
 ];
 
@@ -37,6 +40,7 @@ export function providers() {
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SplashScreen,
     RestProvider,
+    TracksServiceProvider,
     StatusBar
   ];
 }
