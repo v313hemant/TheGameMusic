@@ -41,7 +41,6 @@ export class HomePage {
       this.getArtistTracks(this.entityName);
     }
 
-
   }
 
   getPlaylistTracks(entityName: string){
@@ -59,8 +58,6 @@ export class HomePage {
   }
 
   playService(track: ITrackConstraint, index: number){
-    console.log(this.myTracks);
-    // this.tracksService.stopTrack();
     this.tracksService.setMyTracks(this.myTracks);
     this.tracksService.setCurrentTrack(track, index);
     this.navCtrl.push(RunTracksPage);

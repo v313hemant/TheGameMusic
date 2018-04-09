@@ -9,6 +9,11 @@
 
 <ion-content padding>
 
+    <button ion-button full (click)="play()">Start Audio</button>
+    <button ion-button full (click)="stop()">Stop Audio</button>
+
+    <h1>{{trackTittle}}</h1>
+
   <!-- <audio-track #audio [track]="this.currentTrack" (onFinish)="onTrackFinished($event)">
     <ion-item>
         <ion-thumbnail item-left>
@@ -19,7 +24,7 @@
     </ion-item>
   </audio-track> -->
 
-  <audio-track #audio [track]="currentTrack" (onFinish)="onTrackFinished($event)">
+  <!-- <audio-track #audio [track]="currentTrack" (onFinish)="onTrackFinished($event)">
     <button ion-button icon-start (click)="playSelectedTrack()">
       <ion-icon name="play"></ion-icon>
       Play
@@ -29,13 +34,11 @@
       <ion-icon name="pause"></ion-icon>
       Pause
     </button>
-    </audio-track>
+    </audio-track> -->
 
     <!-- <ion-item>
       <ion-input [(ngModel)]="trackNo" type="text"></ion-input>
     </ion-item> -->
-
-<h1>{{currentTrack}}</h1>
 
   <!-- <div id="div2">
   <ion-title>Player</ion-title>

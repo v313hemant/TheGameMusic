@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ITrackConstraint } from 'ionic-audio';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { AudioProvider } from 'ionic-audio';
+import { Media, MediaObject } from '@ionic-native/media';
 
 @Injectable()
 export class TracksServiceProvider {
@@ -15,8 +16,10 @@ export class TracksServiceProvider {
   currentTrack = this.homeCurrentTrack.asObservable();
   currentIndex = this.homeCurrentIndex.asObservable();
   newIndex: number = 0;
+  mediaObject: MediaObject[];
+  currentMediaObject: MediaObject;
 
-  constructor(public http: HttpClient, public audioProvider: AudioProvider) {
+  constructor(public http: HttpClient, public media: Media) {
 
   }
 
@@ -31,6 +34,24 @@ export class TracksServiceProvider {
     //Make track newIndex
     this.newIndex++;
   }
+
+  play(url: string) {
+      this.stop();
+      this.currentMediaObject = this.media.create(url);
+      this.currentMediaObject.play();
+      // this.mediaObject[this.newIndex] = this.media.create(url);
+      // this.currentMediaObject = this.mediaObject[this.newIndex];
+      // this.currentMediaObject.play();
+    }
+
+  stop() {
+    try{
+      this.currentMediaObject.stop();
+    } catch(e){
+      console.log(e.message);
+    }
+  }
+
 
   // stopTrack(){
   //   console.log("Should pause...");

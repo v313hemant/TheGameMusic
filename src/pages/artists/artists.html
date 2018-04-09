@@ -4,7 +4,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding class="mastersArtist">
 
   <ion-row>
     <ion-col *ngFor="let playlist of myPlaylists">
@@ -17,7 +17,7 @@
   </ion-row>
 
   <ion-list>
-    <ion-item *ngFor="let artist of myArtists">
+    <ion-item *ngFor="let artist of myArtists" class="artistList">
       <ion-thumbnail item-left>
         <img src="{{artist.image}}">
       </ion-thumbnail>

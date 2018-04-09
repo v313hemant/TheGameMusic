@@ -13,6 +13,7 @@ import { RunTracksPage } from '../pages/run-tracks/run-tracks';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { IonicAudioModule, WebAudioProvider, CordovaMediaProvider, defaultAudioProviderFactory } from 'ionic-audio';
+import { Media } from '@ionic-native/media';
 import { ArtistsPage } from "../pages/artists/artists";
 import { RestProvider } from '../providers/rest/rest';
 import { TracksServiceProvider } from '../providers/tracks-service/tracks-service';
@@ -41,6 +42,7 @@ export function providers() {
     SplashScreen,
     RestProvider,
     TracksServiceProvider,
+    Media,
     StatusBar
   ];
 }

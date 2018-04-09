@@ -2,7 +2,6 @@ import { Component, ChangeDetectorRef  } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { ITrackConstraint } from 'ionic-audio';
 import { TracksServiceProvider } from '../../providers/tracks-service/tracks-service';
-import { AudioProvider } from 'ionic-audio';
 
 @Component({
   selector: 'page-run-tracks',
@@ -12,23 +11,33 @@ export class RunTracksPage {
 
   myTracks: ITrackConstraint[];
   currentIndex: number;
-  currentTrack: ITrackConstraint;
+  public currentTrack: ITrackConstraint;
   trackNo: number;
-  public _audioProvider: AudioProvider;
+  trackTittle: string;
 
-
-  constructor(public navCtrl: NavController, private _cdRef: ChangeDetectorRef, public navParams: NavParams, public tracksService: TracksServiceProvider,
-  ) {
-    this._audioProvider = tracksService.audioProvider;
-  }
+  constructor(public navCtrl: NavController,
+    private _cdRef: ChangeDetectorRef, public navParams: NavParams,
+    public tracksService: TracksServiceProvider,
+  ) { }
 
   ionViewDidLoad() {
     this.getTracks();
     this.getCurrentTrackDetails();
+    this.trackTittle = this.currentTrack.title;
     console.log("Run Tracks..",this.currentIndex,"@@", this.currentTrack);
     // this.myTracks = this.tracksService._audioProvider.tracks;
     // this.play(this.currentTrack,this.currentIndex);
   }
+
+  play() {
+      this.tracksService.play(this.currentTrack.src);
+    }
+
+    stop() {
+      this.tracksService.stop();
+    }
+
+
 
   getTracks(){
     this.tracksService.myTracks.subscribe( tracks => {
@@ -42,33 +51,34 @@ export class RunTracksPage {
     this.tracksService.currentTrack.subscribe( track => {
       this.currentTrack = track;
       console.log("Loggin.. ",this.currentTrack,"#####", track);
+      console.log("currentTrack.src ",this.currentTrack.src);
     }, err => {
       console.log(err);
     });
     this.currentIndex=this.tracksService.newIndex;
     console.log("currentIndex: ",this.currentIndex);
   }
-
-    playSelectedTrack() {
-      // use AudioProvider to control selected track
-      console.log("playSelectedTrack", this.currentIndex,"$$$",this.currentTrack);
-
-      try {
-        // this.tracksService._audioProvider.stop();
-        this._audioProvider.pause(this.currentIndex-1);
-        this._audioProvider.play(this.currentIndex);
-      }
-      catch(e) {
-        console.log(e);
-      }
-
-    }
-
-    pauseSelectedTrack() {
-       // use AudioProvider to control selected track
-       console.log("pauseSelectedTrack ",this.currentIndex,"####");
-       this._audioProvider.pause(this.currentIndex);
-    }
+  //
+  //   playSelectedTrack() {
+  //     // use AudioProvider to control selected track
+  //     console.log("playSelectedTrack", this.currentIndex,"$$$",this.currentTrack);
+  //
+  //     try {
+  //       // this.tracksService._audioProvider.stop();
+  //       this._audioProvider.pause(this.currentIndex-1);
+  //       this._audioProvider.play(this.currentIndex);
+  //     }
+  //     catch(e) {
+  //       console.log(e);
+  //     }
+  //
+  //   }
+  //
+  //   pauseSelectedTrack() {
+  //      // use AudioProvider to control selected track
+  //      console.log("pauseSelectedTrack ",this.currentIndex,"####");
+  //      this._audioProvider.pause(this.currentIndex);
+  //   }
 
 
   // play(track: ITrackConstraint, index: number) {
