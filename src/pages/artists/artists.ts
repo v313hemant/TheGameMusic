@@ -4,7 +4,6 @@ import { Artist } from '../../model/Artist';
 import { Playlist } from '../../model/Playlist';
 import { HomePage } from '../home/home';
 
-@IonicPage()
 @Component({
   selector: 'page-artists',
   templateUrl: 'artists.html',

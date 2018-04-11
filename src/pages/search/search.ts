@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ITrackConstraint } from 'ionic-audio';
 import { RestProvider } from '../../providers/rest/rest';
 
-@IonicPage()
 @Component({
   selector: 'page-search',
   templateUrl: 'search.html',

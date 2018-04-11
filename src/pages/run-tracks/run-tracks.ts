@@ -2,6 +2,7 @@ import { Component, ChangeDetectorRef  } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { ITrackConstraint } from 'ionic-audio';
 import { TracksServiceProvider } from '../../providers/tracks-service/tracks-service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'page-run-tracks',
@@ -14,6 +15,15 @@ export class RunTracksPage {
   public currentTrack: ITrackConstraint;
   trackNo: number;
   trackTittle: string;
+  currentDuration: any;
+  duration_string: string;
+  currentPosition: any;
+  position_string: any;
+  get_position_interval: any;
+
+  is_playing: boolean = false;
+  is_in_play: boolean = false;
+  is_ready: boolean = true;
 
   constructor(public navCtrl: NavController,
     private _cdRef: ChangeDetectorRef, public navParams: NavParams,
@@ -25,19 +35,38 @@ export class RunTracksPage {
     this.getCurrentTrackDetails();
     this.trackTittle = this.currentTrack.title;
     console.log("Run Tracks..",this.currentIndex,"@@", this.currentTrack);
+    console.log("currentDuration: ",this.currentDuration);
     // this.myTracks = this.tracksService._audioProvider.tracks;
     // this.play(this.currentTrack,this.currentIndex);
   }
 
+  controlSecondsService(action){
+    this.tracksService.controlSeconds(action);
+  }
+
   play() {
+      // this.stop();
       this.tracksService.play(this.currentTrack.src);
+      let self = this;
+      this.get_position_interval = setInterval(function() {
+          self.currentDuration = self.tracksService.getCurrentDuration();
+          self.is_ready = self.tracksService.getCurrent_is_ready();
+          self.is_playing = self.tracksService.getCurrent_is_playing();
+          self.is_in_play = self.tracksService.getCurrent_is_in_play();
+          self.currentPosition = self.tracksService.getCurrentTrackPosition();
+          self.position_string = self.tracksService.getCurrentPositionString();
+          self.duration_string = self.tracksService.getCurrentDurationString();
+      }, 100);
     }
+  pause() {
+    this.tracksService.pause();
+  }
 
-    stop() {
-      this.tracksService.stop();
-    }
-
-
+  stop() {
+    this.tracksService.stop();
+    clearInterval(this.get_position_interval);
+    this.currentPosition = 0;
+  }
 
   getTracks(){
     this.tracksService.myTracks.subscribe( tracks => {
@@ -50,7 +79,7 @@ export class RunTracksPage {
   getCurrentTrackDetails(){
     this.tracksService.currentTrack.subscribe( track => {
       this.currentTrack = track;
-      console.log("Loggin.. ",this.currentTrack,"#####", track);
+      console.log("Logging.. ",this.currentTrack,"#####", track);
       console.log("currentTrack.src ",this.currentTrack.src);
     }, err => {
       console.log(err);
@@ -58,67 +87,5 @@ export class RunTracksPage {
     this.currentIndex=this.tracksService.newIndex;
     console.log("currentIndex: ",this.currentIndex);
   }
-  //
-  //   playSelectedTrack() {
-  //     // use AudioProvider to control selected track
-  //     console.log("playSelectedTrack", this.currentIndex,"$$$",this.currentTrack);
-  //
-  //     try {
-  //       // this.tracksService._audioProvider.stop();
-  //       this._audioProvider.pause(this.currentIndex-1);
-  //       this._audioProvider.play(this.currentIndex);
-  //     }
-  //     catch(e) {
-  //       console.log(e);
-  //     }
-  //
-  //   }
-  //
-  //   pauseSelectedTrack() {
-  //      // use AudioProvider to control selected track
-  //      console.log("pauseSelectedTrack ",this.currentIndex,"####");
-  //      this._audioProvider.pause(this.currentIndex);
-  //   }
-
-
-  // play(track: ITrackConstraint, index: number) {
-  //   console.log("####### play function #######",track,"###", index);
-  //     this.currentTrack = track;
-  //     this.currentIndex = index;
-  // }
-  //
-  // toggle(index){
-  //   // if (this._audioProvider.tracks[index].isPlaying){
-  //   //   this._audioProvider.pause(index);
-  //   // }
-  //   // else {
-  //      this._audioProvider.pause(); // Pause all others
-  //     // this._audioProvider.play(index);
-  //   // }
-  // }
-  //
-  //
-  // next() {
-  //   // if there is a next track on the list play it
-  //   if (this.myTracks.length > 0 && this.currentIndex >= 0 && this.currentIndex < this.myTracks.length - 1) {
-  //     let i = this.currentIndex + 1;
-  //     let track = this.myTracks[i];
-  //     this.play(track, i);
-  //     console.log("####### next function #######",track,"###", this.currentIndex);
-  //     this._cdRef.detectChanges();  // needed to ensure UI update
-  //   } else if (this.currentIndex == -1 && this.myTracks.length > 0) {
-  //     // if no track is playing then start with the first track on the list
-  //     this.play(this.myTracks[0], 0);
-  //   }
-  // }
-  //
-  // onTrackFinished(track: any) {
-  //   this.next();
-  // }
-  //
-  // clear() {
-  //   this.playlist = [];
-  // }
-
 
 }

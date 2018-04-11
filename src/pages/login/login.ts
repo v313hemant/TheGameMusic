@@ -3,7 +3,6 @@ import { IonicPage } from 'ionic-angular';
 // import { FormBuilder, FormControl, Validator } from '@angular/forms';
 import { AlertController, App, LoadingController } from 'ionic-angular';
 
-@IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',

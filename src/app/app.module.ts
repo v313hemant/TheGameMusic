@@ -15,8 +15,11 @@ import { HttpModule } from '@angular/http';
 import { IonicAudioModule, WebAudioProvider, CordovaMediaProvider, defaultAudioProviderFactory } from 'ionic-audio';
 import { Media } from '@ionic-native/media';
 import { ArtistsPage } from "../pages/artists/artists";
+import { SearchPage } from '../pages/search/search';
 import { RestProvider } from '../providers/rest/rest';
 import { TracksServiceProvider } from '../providers/tracks-service/tracks-service';
+import { NgProgressModule } from '@ngx-progressbar/core';
+
 
 let pages = [
     MyApp,
@@ -24,6 +27,7 @@ let pages = [
     AboutPage,
     ContactPage,
     ArtistsPage,
+    SearchPage,
     HomePage,
     RunTracksPage,
     TabsPage
@@ -60,6 +64,7 @@ export function declarations() {
     HttpModule,
     HttpClientModule ,
     IonicModule.forRoot(MyApp),
+    NgProgressModule.forRoot(),
     IonicAudioModule.forRoot(defaultAudioProviderFactory),
     // or use a custom provided function shown above myCustomAudioProviderFactory
   ],

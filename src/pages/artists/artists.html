@@ -7,12 +7,14 @@
 <ion-content padding class="mastersArtist">
 
   <ion-row>
-    <ion-col *ngFor="let playlist of myPlaylists">
+    <ion-col *ngFor="let playlist of myPlaylists" overflow-scroll="true">
+      <!-- <ion-scroll scrollX="true" zoom="false"> -->
       <ion-thumbnail item-left>
         <img src="{{playlist.image}}">
       </ion-thumbnail>
       <h2>{{playlist.name}}</h2>
       <button ion-button (click)="goToSelectedPlaylist(playlist)">See tracks</button>
+      <!-- </ion-scroll> -->
     </ion-col>
   </ion-row>
 
