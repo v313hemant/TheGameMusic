@@ -40,25 +40,32 @@ export class HomePage {
       console.log("####### artist #######",this.entityName);
       this.getArtistTracks(this.entityName);
     }
+    console.log("Home.ts: myTracks: ",this.myTracks)
 
   }
 
   getPlaylistTracks(entityName: string){
     this.rest.getPlaylistTracks(entityName)
            .subscribe(
-             myTracks => this.myTracks = myTracks,
+             myTracks => {
+               this.myTracks = myTracks;
+               this.tracksService.setMyTracks(this.myTracks);
+             },
              error =>  this.errorMessage = <any>error);
+
   }
 
   getArtistTracks(entityName: string){
     this.rest.getArtistTracks(entityName)
            .subscribe(
-             myTracks => this.myTracks = myTracks,
+             myTracks => {
+               this.myTracks = myTracks;
+               this.tracksService.setMyTracks(this.myTracks);
+             },
              error =>  this.errorMessage = <any>error);
   }
 
   playService(track: ITrackConstraint, index: number){
-    this.tracksService.setMyTracks(this.myTracks);
     this.tracksService.setCurrentTrack(track, index);
     this.navCtrl.push(RunTracksPage);
   }

@@ -33,6 +33,10 @@ export class TracksServiceProvider {
   constructor(public http: HttpClient, public media: Media) {
   }
 
+  getNewIndex(): number {
+    return this.newIndex;
+  }
+
   getCurrent_is_playing(): any {
     return this.is_playing;
   }
@@ -139,22 +143,26 @@ export class TracksServiceProvider {
   getDurationAndSetToPlay() {
 
       let self = this;
-      this.get_duration_interval = setInterval(function() {
+      // this.get_duration_interval = setInterval(function() {
         if(self.duration == -1) {
           self.duration = ~~(self.currentMediaObject.getDuration());
-          self.duration_string = self.fmtMSS(self.duration);  // make it an integer
+          var date = new Date(null);
+          date.setSeconds(self.duration); // specify value for SECONDS here
+          var result = date.toISOString().substr(11, 8);
+          self.duration_string = result;
+          // self.duration_string = self.fmtMSS(self.duration);  // make it an integer
           console.log("TRACK-SERVICE: ",self.duration);
         } else {
           self.getAndSetCurrentAudioPosition();
           clearInterval(self.get_duration_interval);
         }
-      }, 100);
+      // }, 100);
     }
 
     getAndSetCurrentAudioPosition() {
       let diff = 1;
       let self = this;
-      this.get_position_interval = setInterval(function() {
+      // this.get_position_interval = setInterval(function() {
         let last_position = self.position;
         self.currentMediaObject.getCurrentPosition().then((position) => {
           if (position >= 0 && position < self.duration) {
@@ -164,11 +172,19 @@ export class TracksServiceProvider {
             } else {
               // update position for display
               self.position = position;
-              self.position_string = self.fmtMSS(self.position);
+              var date = new Date(null);
+              date.setSeconds(self.position); // specify value for SECONDS here
+              var result = date.toISOString().substr(11, 8);
+              self.position_string = result;
+              // self.position_string = (self.fmtMSS(self.position).substring(0, 5));
             }
           }
+          else if (position >= self.duration) {
+            self.stop();
+            self.newIndex++;
+          }
         });
-      }, 100);
+      // }, 100);
     }
 
     /*** utility functions ***/

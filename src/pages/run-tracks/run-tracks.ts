@@ -20,7 +20,7 @@ export class RunTracksPage {
   currentPosition: any;
   position_string: any;
   get_position_interval: any;
-
+  index: number = 1;
   is_playing: boolean = false;
   is_in_play: boolean = false;
   is_ready: boolean = true;
@@ -28,14 +28,22 @@ export class RunTracksPage {
   constructor(public navCtrl: NavController,
     private _cdRef: ChangeDetectorRef, public navParams: NavParams,
     public tracksService: TracksServiceProvider,
-  ) { }
-
-  ionViewDidLoad() {
+  ) {
     this.getTracks();
     this.getCurrentTrackDetails();
     this.trackTittle = this.currentTrack.title;
+    console.log("myTracks..",this.myTracks);
     console.log("Run Tracks..",this.currentIndex,"@@", this.currentTrack);
     console.log("currentDuration: ",this.currentDuration);
+  }
+
+  ionViewDidLoad() {
+    // this.getTracks();
+    // this.getCurrentTrackDetails();
+    // this.trackTittle = this.currentTrack.title;
+    // console.log("myTracks..",this.myTracks);
+    // console.log("Run Tracks..",this.currentIndex,"@@", this.currentTrack);
+    // console.log("currentDuration: ",this.currentDuration);
     // this.myTracks = this.tracksService._audioProvider.tracks;
     // this.play(this.currentTrack,this.currentIndex);
   }
@@ -49,6 +57,7 @@ export class RunTracksPage {
       this.tracksService.play(this.currentTrack.src);
       let self = this;
       this.get_position_interval = setInterval(function() {
+          self.tracksService.getDurationAndSetToPlay();
           self.currentDuration = self.tracksService.getCurrentDuration();
           self.is_ready = self.tracksService.getCurrent_is_ready();
           self.is_playing = self.tracksService.getCurrent_is_playing();
@@ -56,8 +65,20 @@ export class RunTracksPage {
           self.currentPosition = self.tracksService.getCurrentTrackPosition();
           self.position_string = self.tracksService.getCurrentPositionString();
           self.duration_string = self.tracksService.getCurrentDurationString();
+          let i = self.tracksService.getNewIndex();
+          if(self.index!==i){
+            self.index=i;
+            self.currentTrack = self.getNewTrack(i);
+            self.trackTittle = self.currentTrack.title;
+            self.tracksService.play(self.currentTrack.src);
+          }
       }, 100);
     }
+
+  getNewTrack(i: number): ITrackConstraint {
+    return this.myTracks[i];
+  }
+
   pause() {
     this.tracksService.pause();
   }
@@ -71,6 +92,7 @@ export class RunTracksPage {
   getTracks(){
     this.tracksService.myTracks.subscribe( tracks => {
       this.myTracks = tracks
+      console.log("getTracks: ",this.myTracks);
     }, err => {
       console.log(err);
     });
